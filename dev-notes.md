@@ -12,24 +12,24 @@ It calls out to a separate function that sends the emails that accepts the param
 
 email_type, data_array where data_array is the inner part of the notification array (by userid)
 
-1.	Determine what should be the upcoming assignment notifications
-a.	“SELECT * FROM view_upcoming_assignments_report”
-b.	Iterate through the list of records
-i.	For each record, see if the current date - time due = 3 days
-ii.	If so, add to the three-day notification array
-iii.	Else, check if the current date - time due = 1 day
-iv.	If so, add to the one-day notification array
-2.	Determine what should be the notifications for previous assignments
-a.	“SELECT * FROM view_missing_assignments_ids_report”
-b.	Iterate through the list of records
-i.	For each record, see if the current date - time due = 3 days
-ii.	If so, add to the three-day notification array
-iii.	Else, check if the current date - time due = 1 day
-iv.	If so, add to the one-day notification array
-3.	Send the emails for each
-a.	Iterate through the notification array, sending 4 separate emails for each user
-b.	Track the email successes & failures in an array
-4.	Record to the database which emails were sent successfully, and which failed
+	1.	Determine what should be the upcoming assignment notifications
+	  a.	“SELECT * FROM view_upcoming_assignments_report”
+	  b.	Iterate through the list of records
+	    i.	For each record, see if the current date - time due = 3 days
+	    ii.	If so, add to the three-day notification array
+	    iii.	Else, check if the current date - time due = 1 day
+	    iv.	If so, add to the one-day notification array
+	2.	Determine what should be the notifications for previous assignments
+	  a.	“SELECT * FROM view_missing_assignments_ids_report”
+	  b.	Iterate through the list of records
+	    i.	For each record, see if the current date - time due = 3 days
+	    ii.	If so, add to the three-day notification array
+	    iii.	Else, check if the current date - time due = 1 day
+	    iv.	If so, add to the one-day notification array
+	3.	Send the emails for each
+	  a.	Iterate through the notification array, sending 4 separate emails for each user
+	  b.	Track the email successes & failures in an array
+	4.	Record to the database which emails were sent successfully, and which failed
 
 ### Structure of notification array:
 
