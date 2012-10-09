@@ -93,15 +93,16 @@ function get_message_body($email_vars) {
 // Returns a string of the email subject, using the email variables.
 function get_message_subject($email_vars, $notification_type) {
   $message_subject = '';
+  $item_name = ($email_vars['assignments_count'] == 1) ? 'assignment' : 'assignments';
   switch($notification_type) {
     case THREE_DAYS_BEFORE:
-	  $message_subject = 'You have ' . $email_vars['assignments_count'] . ' assignments due in 3 days for ' . COLLEGE_NAME;
+	  $message_subject = 'You have ' . $email_vars['assignments_count'] . ' ' . $item_name . ' due in 3 days for ' . COLLEGE_NAME;
 	  break;
 	case ONE_DAY_AFTER:
-	  $message_subject = 'You have ' . $email_vars['assignments_count'] . ' assignments that are 1 day overdue for ' . COLLEGE_NAME;
+	  $message_subject = 'You have ' . $email_vars['assignments_count'] . ' ' . $item_name . ' that are 1 day overdue for ' . COLLEGE_NAME;
 	  break;
 	case EIGHT_DAYS_AFTER:
-	  $message_subject = 'You have ' . $email_vars['assignments_count'] . ' assignments that are 8 days overdue for ' . COLLEGE_NAME;
+	  $message_subject = 'You have ' . $email_vars['assignments_count'] . ' ' . $item_name . ' that are 8 days overdue for ' . COLLEGE_NAME;
 	  break;
   }
   return $message_subject;
@@ -149,7 +150,7 @@ Policy on Late Assignments:
 3. Assignments submitted more than 2 weeks late will lose 2 letter grades (i.e. "A" becomes a "C").
 4. All assignments and quizzes must be submitted by the week after the term ends or they will receive a failing grade.
 5. Extensions: professors may grant an extension if the student has a prolonged sickness or major family crisis. 
-   The length of the extension is up the the professor's discretion. 
+   The length of the extension is up to the professor's discretion. 
 
 This policy is also viewable on the college Web site, on our Academic Policies page: http://www.cityvision.edu/cms/cv/academic-policies	 
 EOT;
