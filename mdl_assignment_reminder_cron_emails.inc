@@ -94,15 +94,16 @@ function get_message_body($email_vars) {
 function get_message_subject($email_vars, $notification_type) {
   $message_subject = '';
   $item_name = ($email_vars['assignments_count'] == 1) ? 'assignment' : 'assignments';
+  $being_verb = ($email_vars['assignments_count'] == 1) ? 'is' : 'are';
   switch($notification_type) {
     case THREE_DAYS_BEFORE:
 	  $message_subject = 'You have ' . $email_vars['assignments_count'] . ' ' . $item_name . ' due in 3 days for ' . COLLEGE_NAME;
 	  break;
 	case ONE_DAY_AFTER:
-	  $message_subject = 'You have ' . $email_vars['assignments_count'] . ' ' . $item_name . ' that are 1 day overdue for ' . COLLEGE_NAME;
+	  $message_subject = 'You have ' . $email_vars['assignments_count'] . ' ' . $item_name . ' that ' . $being_verb . ' 1 day overdue for ' . COLLEGE_NAME;
 	  break;
 	case EIGHT_DAYS_AFTER:
-	  $message_subject = 'You have ' . $email_vars['assignments_count'] . ' ' . $item_name . ' that are 8 days overdue for ' . COLLEGE_NAME;
+	  $message_subject = 'You have ' . $email_vars['assignments_count'] . ' ' . $item_name . ' that ' . $being_verb . ' 8 days overdue for ' . COLLEGE_NAME;
 	  break;
   }
   return $message_subject;
