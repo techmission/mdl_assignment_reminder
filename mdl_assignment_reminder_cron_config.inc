@@ -15,7 +15,7 @@ define('COLLEGE_EMAIL', 'info@cityvision.edu');
 
 // Whether the emails should be sent. 
 // SET TO TRUE WHEN IN PRODUCTION.
-define('SEND_EMAILS', FALSE);
+define('SEND_EMAILS', TRUE);
 // Whether the emails should be cc'd to someone (used for first few weeks, in development)
 define('EMAIL_CC_ON', TRUE);
 // Who should receive emails in test mode.
@@ -36,4 +36,4 @@ define('CUR_DEBUG_TYPE', DEBUG_EMAIL_TEXT);
 // On 10/5, in our install, 1 day got 3 days before notices, 
 // 5 days got 1 day overdue, 12 days got 8 days overdue, 
 // for all records currently in the tables.
-define('SHIFT_DAYS_AMOUNT', 5);
+define('SHIFT_DAYS_AMOUNT', 1);
