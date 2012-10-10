@@ -54,18 +54,18 @@ function preprocess_email_vars($username, $notification_type, $notification_data
   $email_vars['assignment_list_raw'] = array();
   foreach($notification_data as $course_id => $course_data) {
     $email_vars['assignment_list_raw'][$course_id]['coursename'] = $course_data['coursename'];
-	$assignment_list = '';
+	$assignment_list = '<ul>';
 	foreach($course_data['assignments'] as $assignment) {
-	  $assignment = abbrev($assignment, 80);
-	  $assignment_list .= '* ' . $assignment . "\n";
+	  $assignment = abbrev($assignment, 160);
+	  $assignment_list .= '<li>' . $assignment . "</li>";
 	  // Increment the count used in the subject line to indicate how many assignments there are.
 	  $email_vars['assignments_count']++;
 	}
+        $assignment_list = '</ul>';
 	$email_vars['assignment_list_raw'][$course_id]['assignments'] = $assignment_list;
   }
   // Format this array into a series of lists, grouped by course.
-  $assignment_list_full = 'Assignments Due:' . "\n";
-  $assignment_list_full .= '----------------' . "\n\n";
+  $assignment_list_full = '<h2>Assignments Due:</h2>';
   foreach($email_vars['assignment_list_raw'] as $course_id => $course_data) {
     $assignment_list_full .= $course_data['coursename'] . ':' . "\n\n";
 	$assignment_list_full .= $course_data['assignments'] . "\n\n";
@@ -83,12 +83,13 @@ function abbrev($text, $length) {
 
 // Concatenates preprocessed variables into the email body, and returns as string.
 function get_message_body($email_vars) {
-  $message_body = '';
-  $message_body .= $email_vars['salutation'] . ",\n\n";
-  $message_body .= $email_vars['notification_message'] . "\n\n";
+  $message_body = '<html><body>';
+  $message_body .= '<p>' . $email_vars['salutation'] . "</p>";
+  $message_body .= $email_vars['notification_message'];
   $message_body .= $email_vars['assignment_list'];
-  $message_body .= $email_vars['late_assignment_policy'] . "\n\n";
+  $message_body .= $email_vars['late_assignment_policy'];
   $message_body .= $email_vars['signature'];
+  $message_body .= '</body></html>';
   return $message_body;
 }
 
@@ -114,28 +115,28 @@ function get_message_subject($email_vars, $notification_type) {
 // Return the notification message based on the type of notification, as string.
 function get_notification_message($notification_type) {
   $notification_message = '';
-  $notification_message .= 'You have not yet submitted the assignments listed below.' . "\n\n";
+  $notification_message .= '<p>You have not yet submitted the assignments listed below.</p>';
   if($notification_type == THREE_DAYS_BEFORE) {
-    $notification_message .= 'It is currently ' . display_interval_type($notification_type) . " these assignments are due.\n\n";
+    $notification_message .= '<p>It is currently ' . display_interval_type($notification_type) . ' these assignments are due.</p>';
   }
   else {
-    $notification_message .= 'These assignments are currently ' . display_interval_type($notification_type) . ".\n\n";
+    $notification_message .= '<p>These assignments are currently ' . display_interval_type($notification_type) . '</p>';
   }
   switch($notification_type) {
     case THREE_DAYS_BEFORE:
-	  $notification_message .= 'If you do not submit the assignments within three days, they will be considered late.' . "\n\n";
-	  $notification_message .= 'If you do not submit them within one week, they will be marked down one letter grade,' . "\n";
-	  $notification_message .= 'as per our late assignment policy which is given in full at the bottom of this email.';
+	  $notification_message .= '<p>If you do not submit the assignments within three days, they will be considered late.</p>';
+	  $notification_message .= '<p>If you do not submit them within one week, they will be marked down one letter grade,';
+	  $notification_message .= 'as per our late assignment policy which is given in full at the bottom of this email.</p>';
 	  break;
 	case ONE_DAY_AFTER:
-	  $notification_message .= 'If you do not submit the assignments before the end of this week, they will be marked down one letter grade.' . "\n\n";
-	  $notification_message .= 'If you do not submit them within 2 weeks, they will be marked down two letter grades.' . "\n\n";
-	  $notification_message .= 'For more details, see our late assignment policy which is given in full at the bottom of this email.';
+	  $notification_message .= '<p>If you do not submit the assignments before the end of this week, they will be marked down one letter grade.</p>';
+	  $notification_message .= '<p>If you do not submit them within 2 weeks, they will be marked down two letter grades.</p>';
+	  $notification_message .= '<p>For more details, see our late assignment policy which is given in full at the bottom of this email.</p>';
 	  break;
 	case EIGHT_DAYS_AFTER:
-	  $notification_message .= 'They have already been marked down one letter grade.' . "\n\n";
-	  $notification_message .= 'If you do not submit them by the end of this week, they will be marked down two letter grades, if submitted.' . "\n\n";
-	  $notification_message .= 'For more details, see our late assignment policy which is given in full at the bottom of this email.';
+	  $notification_message .= '<p>They have already been marked down one letter grade.</p>';
+	  $notification_message .= '<p>If you do not submit them by the end of this week, they will be marked down two letter grades, if submitted.</p>';
+	  $notification_message .= '<p>For more details, see our late assignment policy which is given in full at the bottom of this email.</p>';
 	  break;
   }
   return $notification_message;
@@ -145,18 +146,15 @@ function get_notification_message($notification_type) {
 function get_late_assignment_policy() {
   // Use heredoc syntax for simplicity.
   $policy = <<<EOT
-Policy on Late Assignments:
----------------------------
+<h2>Policy on Late Assignments:</h2>
   
-1. Each assignment is due by the end of the day on Sunday in the week it was assigned.
-2. Assignments submitted more than 1 week late (after the following Sunday) will lose 1 letter grade (i.e. "A" becomes a "B")
-3. Assignments submitted more than 2 weeks late will lose 2 letter grades (i.e. "A" becomes a "C").
-4. All assignments and quizzes must be submitted by the week after the term ends or they will receive a failing grade.
-5. Extensions: professors may grant an extension if the student has a prolonged sickness or major family crisis. 
-   The length of the extension is up to the professor's discretion. 
+<ol><li>Each assignment is due by the end of the day on Sunday in the week it was assigned.</li>
+<li>Assignments submitted more than 1 week late (after the following Sunday) will lose 1 letter grade (i.e. "A" becomes a "B")</li>
+<li>Assignments submitted more than 2 weeks late will lose 2 letter grades (i.e. "A" becomes a "C")</li>
+<li>All assignments and quizzes must be submitted by the week after the term ends or they will receive a failing grade.</li>
+<li>Extensions: professors may grant an extension if the student has a prolonged sickness or major family crisis. The length of the extension is up to the professor's discretion.</li>
 
-This policy is also viewable on the college Web site, on our Academic Policies page: http://www.cityvision.edu/cms/cv/academic-policies	 
-EOT;
+<p>This policy is also viewable on the college Web site, on our <a href="http://www.cityvision.edu/cms/cv/academic-policies">Academic Policies page</a>.</p>	EOT;
   return $policy;
 }
 
@@ -164,12 +162,12 @@ EOT;
 function get_signature() {
   // Use heredoc syntax for simplicity.
   $signature = <<<EOT
-If you have any questions or need assistance, please feel free to contact the college support team.
+<p>If you have any questions or need assistance, please feel free to contact the college support team.</p>
   
-Thanks,
-City Vision College Student Services
-(617) 282-9798 x116
-info@cityvision.edu  
+<p>Thanks,<br/>
+City Vision College Student Services<br/>
+(617) 282-9798 x116<br/>
+info@cityvision.edu</p>  
 EOT;
   return $signature;
 }
