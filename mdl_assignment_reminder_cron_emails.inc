@@ -11,6 +11,8 @@ function send_email($username, $mailto, $notification_type, $notification_data) 
   $headers = 'From: ' . COLLEGE_NAME . ' Student Services <' . COLLEGE_EMAIL .'>' . "\r\n";
   $headers .= 'Reply-To: ' . COLLEGE_EMAIL . "\r\n";
   $headers .= 'X-Mailer: PHP/' . phpversion() . "\r\n";
+  $headers .= "MIME-Version: 1.0\r\n";
+  $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
   $success = FALSE;
   // Override mailto in testing, if it actually is going to send emails.
   if(IN_DEVELOPMENT == TRUE && SEND_EMAILS == TRUE) {
