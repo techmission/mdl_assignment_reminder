@@ -120,7 +120,7 @@ function get_notification_message($notification_type) {
     $notification_message .= '<p>It is currently ' . display_interval_type($notification_type) . ' these assignments are due.</p>';
   }
   else {
-    $notification_message .= '<p>These assignments are currently ' . display_interval_type($notification_type) . '.</p>';
+    $notification_message .= '<p>These assignments are currently <strong>' . display_interval_type($notification_type) . '</strong>.</p>';
   }
   switch($notification_type) {
     case THREE_DAYS_BEFORE:
@@ -129,13 +129,13 @@ function get_notification_message($notification_type) {
 	  $notification_message .= 'as per our late assignment policy which is given in full at the bottom of this email.</p>';
 	  break;
 	case ONE_DAY_AFTER:
-	  $notification_message .= '<p>If you do not submit the assignments before the end of this week, they will be marked down one letter grade.</p>';
+	  $notification_message .= '<p>If you do not submit the assignments before the <strong>end of this week</strong>, they will be marked down <strong>one letter grade</strong>.</p>';
 	  $notification_message .= '<p>If you do not submit them within 2 weeks, they will be marked down two letter grades.</p>';
 	  $notification_message .= '<p>For more details, see our late assignment policy which is given in full at the bottom of this email.</p>';
 	  break;
 	case EIGHT_DAYS_AFTER:
 	  $notification_message .= '<p>They have already been marked down one letter grade.</p>';
-	  $notification_message .= '<p>If you do not submit them by the end of this week, they will be marked down two letter grades, if submitted.</p>';
+	  $notification_message .= '<p>If you do not submit them by the <strong>end of this week</strong>, they will be marked down <strong>two letter grades</strong>, if submitted.</p>';
 	  $notification_message .= '<p>For more details, see our late assignment policy which is given in full at the bottom of this email.</p>';
 	  break;
   }
