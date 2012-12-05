@@ -163,6 +163,10 @@ The length of the extension is up to the professor's discretion.</li></ol>
 <p>This policy is also viewable on the college Web site, 
 on our <a href="http://www.cityvision.edu/cms/cv/academic-policies">
 Academic Policies page</a>.</p>
+
+<h2>IMPORTANT NOTICE FOR FINANCIAL AID STUDENTS (Pell or Federal Loans)</h2>
+<ol><li>You MUST complete all assignments for the first two weeks to receive any financial aid.</li>
+<li>You MUST be completely up to date and have submitted all assignments and completed all quizzes through the end of WEEK 5 or you will only receive a partial financial aid award.</li></ol>
 EOT;
   return $policy;
 }
