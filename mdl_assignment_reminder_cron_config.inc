@@ -26,7 +26,7 @@ define('EMAIL_CC_ADDR', 'evan@techmission.org');
 /* Used in debugging only. */
 
 // Whether the script is in development (used to tweak various values)
-define('IN_DEVELOPMENT', TRUE);
+define('IN_DEVELOPMENT', FALSE);
 // Whether tests only should run. (Note tests may not currently work, since refactored.)
 define('TESTS_ONLY', FALSE);
 // Current mode for debugging. (Controls what, if anything, is output to screen.)
@@ -36,4 +36,4 @@ define('CUR_DEBUG_TYPE', DEBUG_EMAIL_TEXT);
 // On 10/5, in our install, 1 day got 3 days before notices, 
 // 5 days got 1 day overdue, 12 days got 8 days overdue, 
 // for all records currently in the tables.
-define('SHIFT_DAYS_AMOUNT', 1);
+define('SHIFT_DAYS_AMOUNT', 0);
