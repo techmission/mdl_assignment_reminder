@@ -4,7 +4,7 @@
 /* @todo: Make this more easily configurable? */
 
 /* Helper function to send an individual notification email. */
-function send_email($username, $mailto, $notification_type, $notification_data) {
+function send_email($username, $mailto, $notification_type, $notification_data, $cc_partner = '') {
   $email_vars = preprocess_email_vars($username, $notification_type, $notification_data);
   $message_body = get_message_body($email_vars);
   $message_subject = get_message_subject($email_vars, $notification_type);
@@ -21,7 +21,15 @@ function send_email($username, $mailto, $notification_type, $notification_data) 
   // If set to cc someone, add in the header for that.
   if(EMAIL_CC_ON == TRUE) {
     $cc_addr = EMAIL_CC_ADDR;
-	$headers .= 'Cc: ' . $cc_addr . "\r\n";
+    if($cc_partner != '') {
+      $headers .= 'Cc: ' . $cc_addr . "," . $cc_partner . "\r\n";
+    }
+    else {
+      $headers .= 'Cc: ' . $cc_addr . "\r\n";
+    }
+  }
+  elseif($cc_partner != '') {
+   $headers .= 'Cc: ' . $cc_partner . "\r\n";
   }
   // Send the email itself.
   if(SEND_EMAILS == TRUE) {
