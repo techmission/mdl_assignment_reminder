@@ -19,9 +19,9 @@ define('SEND_EMAILS', TRUE);
 // Whether the emails should be cc'd to someone (used for first few weeks, in development)
 define('EMAIL_CC_ON', TRUE);
 // Who should receive emails in test mode.
-define('EMAIL_TEST_ADDR', 'evan@techmission.org');
+define('EMAIL_TEST_ADDR', 'outofegypt+test@gmail.com');
 // Who the emails should be cc'd to
-define('EMAIL_CC_ADDR', 'outofegypt@gmail.com');
+define('EMAIL_CC_ADDR', 'outofegypt+cc@gmail.com');
 
 
 /* Used in debugging only. */
@@ -31,7 +31,7 @@ define('IN_DEVELOPMENT', FALSE);
 // Whether tests only should run. (Note tests may not currently work, since refactored.)
 define('TESTS_ONLY', FALSE);
 // Current mode for debugging. (Controls what, if anything, is output to screen.)
-define('CUR_DEBUG_TYPE', DEBUG_EMAIL_TEXT);
+define('CUR_DEBUG_TYPE', DEBUG_DATA_BUILD);
 
 // How many days to shift.
 // On 10/5, in our install, 1 day got 3 days before notices, 
