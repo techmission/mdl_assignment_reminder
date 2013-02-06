@@ -88,7 +88,7 @@ function get_notifications_array($rows) {
           if(!in_array($row['studentid'], $data_array)) {
 	    $data_array[$row['studentid']]['username'] = array($row['firstname'], $row['lastname']);
 	    $data_array[$row['studentid']]['mailto'] = $row['mailto'];
-            $data_array[$row['studentid']['cc_email'] = $row['cc_email'];
+            $data_array[$row['studentid']]['cc_email'] = $row['cc_email'];
 	  }
 	  // Add the course id.
 	  if(!in_array($row['courseid'], $data_array[$row['studentid']][$date_interval['type']])) {
