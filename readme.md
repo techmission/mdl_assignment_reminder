@@ -9,7 +9,7 @@ This project's canonical version is available via [Github](https://github.com/te
 
 ## Release Status & Bug Reporting
 
-This is currently pre-alpha quality code. It has not yet been tested to send out emails accurately, though I believe it will.
+This is currently alpha quality code. It sends out emails, but is not tested in all use cases.
 
 No guarantees are made as to how this will affect your Moodle system, so use on development only, 
 until you are satisfied with the results.
