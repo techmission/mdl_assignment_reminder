@@ -74,20 +74,21 @@ function get_notifications_array($rows) {
   foreach($rows as $row_index => $row) {
     // Shift the time when in test mode, in order to see different results.
     if(IN_DEVELOPMENT == TRUE) {
-	  $time_now = time_shift_days(SHIFT_DAYS_AMOUNT, SHIFT_POSITIVE);
-	}
-	else {
-	  $time_now = time();
-	}
+      $time_now = time_shift_days(SHIFT_DAYS_AMOUNT, SHIFT_POSITIVE);
+    }
+    else {
+      $time_now = time();
+    }
     $date_interval = get_date_interval($row['time_due'], $time_now);
 	// Only add to the array if the date interval is valid.
 	if($date_interval['type'] != INVALID_INTERVAL) {
 	  // Get the row for logging valid data from this time.
 	  $valid_array[] = get_log_row_data($row, $date_interval, $time_now);
 	  // Add the student id.
-      if(!in_array($row['studentid'], $data_array)) {
+          if(!in_array($row['studentid'], $data_array)) {
 	    $data_array[$row['studentid']]['username'] = array($row['firstname'], $row['lastname']);
-		$data_array[$row['studentid']]['mailto'] = $row['mailto'];
+	    $data_array[$row['studentid']]['mailto'] = $row['mailto'];
+            $data_array[$row['studentid']['cc_email'] = $row['cc_email'];
 	  }
 	  // Add the course id.
 	  if(!in_array($row['courseid'], $data_array[$row['studentid']][$date_interval['type']])) {
@@ -123,7 +124,10 @@ function send_emails($data_array) {
     foreach($user_notifications as $notification_type => $notification_data) {
 	  $valid_types = get_valid_intervals();
 	  if(in_array($notification_type, $valid_types)) {
-	    $success = send_email($data_array[$userid]['username'], $data_array[$userid]['mailto'], $notification_type, $notification_data);
+            if($data_array[$userid]['cc_email'] == NULL) {
+              $data_array[$userid]['cc_email'] = '';
+            }
+	    $success = send_email($data_array[$userid]['username'], $data_array[$userid]['mailto'], $notification_type, $notification_data, $data_array[$userid]['cc_email']);
 		if($success == TRUE) {
 		  $num_success++;
 		  $success_array[] = get_log_email_data($userid, $data_array[$userid]['username'], $data_array[$userid]['mailto'], $notification_type);
@@ -227,13 +231,13 @@ function set_correct_field_names($row) {
 function get_log_row_data($row, $date_interval, $time_now) {
   $log_row = array(
     'userid' => $row['userid'],
-	'username' => $row['firstname'] . ' ' . $row['lastname'],
-	'time_now' => $time_now,
+    'username' => $row['firstname'] . ' ' . $row['lastname'],
+    'time_now' => $time_now,
     'time_due' => $row['time_due'],
-	'interval' => $date_interval,
-	'courseid' => $row['courseid'],
-	'coursename' => $row['course_name'],
-	'assignment' => $row['assignment'],
+    'interval' => $date_interval,
+    'courseid' => $row['courseid'],
+    'coursename' => $row['course_name'],
+    'assignment' => $row['assignment'],
   );
   return $log_row;
 }
