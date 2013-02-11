@@ -127,7 +127,14 @@ function send_emails($data_array) {
             if($data_array[$userid]['cc_email'] == NULL) {
               $data_array[$userid]['cc_email'] = '';
             }
-	    $success = send_email($data_array[$userid]['username'], $data_array[$userid]['mailto'], $notification_type, $notification_data, $data_array[$userid]['cc_email']);
+            if($notification_type != THREE_DAYS_BEFORE) {
+	      $success = send_email($data_array[$userid]['username'], $data_array[$userid]['mailto'],
+                $notification_type, $notification_data, $data_array[$userid]['cc_email']);
+            }
+            else {
+              $success = send_email($data_array[$userid]['username'], $data_array[$userid]['mailto'],
+                $notification_type, $notification_data);
+             }
 		if($success == TRUE) {
 		  $num_success++;
 		  $success_array[] = get_log_email_data($userid, $data_array[$userid]['username'], $data_array[$userid]['mailto'], $notification_type);
