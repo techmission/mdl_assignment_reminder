@@ -21,7 +21,8 @@ define('EMAIL_CC_ON', TRUE);
 // Who should receive emails in test mode.
 define('EMAIL_TEST_ADDR', 'outofegypt+test@gmail.com');
 // Who the emails should be cc'd to
-define('EMAIL_CC_ADDR', 'outofegypt+cc@gmail.com');
+define('EMAIL_CC_ADDR', 'techie.techmission+cc@gmail.com');
+// define('EMAIL_CC_ADDR', 'outofegypt+test@gmail.com');
 
 
 /* Used in debugging only. */

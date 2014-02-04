@@ -35,7 +35,7 @@ function run_cron() {
 /* Step 1: Query the database for assignments. */
 function run_assignment_queries() {
   // Execute query for upcoming assignments.
-  $sql = 'SELECT * FROM view_upcoming_assignments_report order by lastname asc, time_due asc, assignment asc';
+  $sql = 'SELECT DISTINCT(assignment), studentid, firstname, lastname, mailto, cc_email, courseid, course_name, time_due, time_due_human, days_till_due FROM view_upcoming_assignments_report order by lastname asc, time_due asc, assignment asc';
   $results = db_query($sql);
   // Create array to store the upcoming and previous assignments.
   $num_rows_upcoming = 0;
@@ -61,6 +61,7 @@ function run_assignment_queries() {
   $total_rows = $num_rows_upcoming + $num_rows_missing;
   return array('rows' => $rows, 'total_rows' => $total_rows, 'upcoming_rows' => $num_rows_upcoming, 'missing_rows' => $num_rows_missing);
 }
+
 
 /* Step 2: Build the array used to indicate the people who should be notified about assignments. */
 function get_notifications_array($rows) {
