@@ -37,7 +37,7 @@ COLLATE='utf8_general_ci'
 ENGINE=MyISAM
 AUTO_INCREMENT=0;
 
-create or replace view upcoming_assignments_report as
+create or replace view view_upcoming_assignments_report as
 select `student`.`id` AS `studentid`,`student`.`firstname` AS `firstname`,`student`.`lastname` AS `lastname`,`student`.`email` as `mailto`,`mdl_course`.`id` AS `courseid`,`mdl_course`.`fullname` AS `course_name`,`mdl_assignment`.`name` AS `assignment`,`mdl_assignment`.`timedue` AS `time_due`,date_format(from_unixtime(`mdl_assignment`.`timedue`),'%b. %e, %Y at %l:%i %p') AS `time_due_human`,(to_days(from_unixtime(`mdl_assignment`.`timedue`)) - to_days(now())) AS `days_till_due` from (((((`mdl_assignment` left join `mdl_assignment_submissions` on((`mdl_assignment_submissions`.`assignment` = `mdl_assignment`.`id`))) join `mdl_course` on((`mdl_course`.`id` = `mdl_assignment`.`course`))) join `mdl_context` on((`mdl_context`.`instanceid` = `mdl_course`.`id`))) join `mdl_role_assignments` on((`mdl_role_assignments`.`contextid` = `mdl_context`.`id`))) join `mdl_user` `student` on((`mdl_role_assignments`.`userid` = `student`.`id`))) where (isnull(`mdl_assignment_submissions`.`id`) and (`mdl_assignment`.`assignmenttype` <> 'offline') and (`mdl_assignment`.`grade` > 0) and (not((`mdl_course`.`fullname` like '%demo%'))) and (not((`mdl_course`.`fullname` like '%test%'))) and ((unix_timestamp(now()) - ((((60 * 60) * 24) * 7) * 8)) < `mdl_course`.`startdate`) and (`mdl_role_assignments`.`roleid` = 5)); 
 
 create or replace view view_missing_assignments_graded_curterm_ids as
