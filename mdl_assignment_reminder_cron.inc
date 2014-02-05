@@ -75,7 +75,7 @@ function get_notifications_array($rows) {
   foreach($rows as $row_index => $row) {
     // Shift the time when in test mode, in order to see different results.
     if(IN_DEVELOPMENT == TRUE) {
-      $time_now = time_shift_days(SHIFT_DAYS_AMOUNT, SHIFT_POSITIVE);
+      $time_now = time_shift_days(SHIFT_DAYS_AMOUNT, CUR_DEBUG_SHIFT_TYPE);
     }
     else {
       $time_now = time();

@@ -89,7 +89,7 @@ function time_shift_days($num_days = 0, $shift_type = SHIFT_NONE) {
     $time = $time + (60*60*24*$num_days);
   }
   else if($shift_type == SHIFT_NEGATIVE) {
-    $time = $time - (60*60*$num_days);
+    $time = $time - (60*60*24*$num_days);
   }
   return $time;
 }
