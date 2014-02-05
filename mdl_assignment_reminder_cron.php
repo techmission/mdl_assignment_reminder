@@ -7,7 +7,7 @@
 /* Includes required scripts. */
 require_once './mdl_assignment_reminder_cron.inc';            // Main cron script functions
 require_once './mdl_assignment_reminder_cron_constants.inc';  // Constants for core script functionality
-require_once './mdl_assignment_reminder_cron_config.inc';     // User configuration constants: CURRENTLY IN DEBUG MODE (NO EMAILS SENT)
+require_once './mdl_assignment_reminder_cron_config.inc';     // User configuration constants
 require_once './mdl_assignment_reminder_cron_emails.inc';     // Email-building functions
 require_once './mdl_assignment_reminder_cron_tests.inc';      // Used in testing only. (Haven't tested test framework yet.)
 // Go down a directory to include Drupal framework, for DB layer functions.
