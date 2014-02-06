@@ -28,7 +28,7 @@ define('EMAIL_CC_ADDR', 'techie.techmission+cc@gmail.com');
 /* Used in debugging only. */
 
 // Whether the script is in development (used to tweak various values)
-define('IN_DEVELOPMENT', TRUE);
+define('IN_DEVELOPMENT', FALSE);
 // Whether tests only should run. (Note tests may not currently work, since refactored.)
 define('TESTS_ONLY', FALSE);
 // Current mode for debugging. (Controls what, if anything, is output to screen.)
