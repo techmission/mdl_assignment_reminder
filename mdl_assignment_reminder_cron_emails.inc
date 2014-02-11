@@ -21,7 +21,7 @@ function send_email($username, $mailto, $notification_type, $notification_data, 
   // If set to cc someone, add in the header for that.
   if(EMAIL_CC_ON == TRUE) {
     $cc_addr = EMAIL_CC_ADDR;
-    if($cc_partner != '') {
+    if($cc_partner != '' && IN_DEVELOPMENT == FALSE) {
       $headers .= 'Cc: ' . $cc_addr . "," . $cc_partner . "\r\n";
     }
     else {
