@@ -305,76 +305,93 @@ left join view_late_assignments_twelvedays on
 view_late_assignments_all.userid = view_late_assignments_twelvedays.userid and
 view_late_assignments_all.courseid = view_late_assignments_twelvedays.courseid 
 
-CREATE VIEW view_missing_assignments_graded_curterm_ids AS
-SELECT `student`.`id`             AS `userid`,
-       `student`.`firstname`      AS `firstname`,
-       `student`.`lastname`       AS `lastname`,
-       `mdl_course`.`id`          AS `courseid`,
-       `student`.`email`          AS `mailto`,
-       `student`.`data`           AS `cc_email`,
-       `mdl_course`.`fullname`    AS `coursename`,
-       `mdl_assign`.`name`    AS `assignment`,
-       `mdl_assign`.`duedate` AS `time_due`
-FROM   `mdl_assign_submission`
-             JOIN `mdl_assign`
-               ON `mdl_assign_submission`.`assignment` =
-                    `mdl_assign`.`id`
-            JOIN `mdl_course`
-              ON `mdl_course`.`id` = `mdl_assign`.`course`
-           JOIN `view_student` `student`
-             ON `student`.`id` = `mdl_assign_submission`.`userid`
-         JOIN `mdl_enrol`
-           ON `mdl_enrol`.`courseid` = `mdl_course`.`id`
-        JOIN `mdl_user_enrolments` `ue`
-          ON `ue`.`enrolid` = `mdl_enrol`.`id`
-               AND `ue`.`userid` = `student`.`id`
-               JOIN view_assign_plugin_config on view_assign_plugin_config.id = mdl_assign.id
-               LEFT JOIN mdl_assign_grades on mdl_assign_grades.assignment = mdl_assign.id
-WHERE  `mdl_assign_submission`.`attemptnumber` = 0
-         AND (Unix_timestamp(Now()) - 60 * 60  * 24  * 7 * 8) < `mdl_course`.`startdate`
-         AND (Isnull(`mdl_assign_grades`.`grade`) OR `mdl_assign_grades`.`grade` < 1)
-         AND `mdl_assign`.`grade` > 0
-         AND NOT(`mdl_course`.`fullname` LIKE '%demo%')
-         AND NOT( `mdl_course`.`fullname` LIKE '%test%' )
-         AND `ue`.`status` = 0
+CREATE VIEW view_missing_assignments_curterm_ids AS
+SELECT `student`.`id`              AS `userid`,
+       `student`.`firstname`       AS `firstname`,
+       `student`.`lastname`        AS `lastname`,
+       `mdl_course`.`id`           AS `courseid`,
+       `mdl_assign_grades`.`grade` AS `grade`,
+       `student`.`email`           AS `mailto`,
+       `student`.`data`            AS `cc_email`,
+       `mdl_course`.`fullname`     AS `coursename`,
+       `mdl_assign`.`name`         AS `assignment`,
+       `mdl_assign`.`duedate`      AS `time_due`
+FROM   (((((((`mdl_assign_grades`
+              JOIN `mdl_assign`
+                ON(( `mdl_assign_grades`.`assignment` = `mdl_assign`.`id` )))
+             JOIN `mdl_course`
+               ON(( `mdl_course`.`id` = `mdl_assign`.`course` )))
+            JOIN `view_student` `student`
+              ON(( `student`.`id` = `mdl_assign_grades`.`userid` )))
+           JOIN `mdl_enrol`
+             ON(( `mdl_enrol`.`courseid` = `mdl_course`.`id` )))
+          JOIN `mdl_user_enrolments` `ue`
+            ON(( ( `ue`.`enrolid` = `mdl_enrol`.`id` )
+                 AND ( `ue`.`userid` = `student`.`id` ) )))
+         JOIN `view_assign_plugin_config`
+           ON(( ( `view_assign_plugin_config`.`id` = `mdl_assign`.`id` )
+                AND ( `mdl_assign_grades`.`userid` = `student`.`id` ) )))
+        LEFT JOIN `mdl_assign_submission`
+               ON(( ( `mdl_assign_submission`.`assignment` = `mdl_assign`.`id` )
+                    AND ( `mdl_assign_submission`.`userid` =
+                          `mdl_assign_grades`.`userid` ) )))
+WHERE  ( ( ( Unix_timestamp(Now()) - ( ( ( ( 60 * 60 ) * 24 ) * 7 ) * 8 ) ) <
+                    `mdl_course`.`startdate` )
+         AND ( `mdl_assign_grades`.`grade` < 1 )
+         AND ( `mdl_assign`.`grade` > 0 )
+         AND Isnull(`mdl_assign_submission`.`id`)
+         AND ( NOT(( `mdl_course`.`fullname` LIKE '%demo%' )) )
+         AND ( NOT(( `mdl_course`.`fullname` LIKE '%test%' )) )
+         AND ( `ue`.`status` = 0 ) )
 ORDER  BY `student`.`lastname`,
           `student`.`firstname` 
 
 CREATE VIEW view_missing_assignments_ungraded_curterm_ids AS
-SELECT `student`.`id`             AS `userid`,
-       `student`.`firstname`      AS `firstname`,
-       `student`.`lastname`       AS `lastname`,
-       `student`.`email`          AS `mailto`,
-       `student`.`data`           AS `cc_email`,
-       `mdl_course`.`id`          AS `courseid`,
-       `mdl_course`.`fullname`    AS `coursename`,
-       `mdl_assign`.`name`    AS `assignment`,
-       `mdl_assign`.`duedate` AS `time_due`, 
+SELECT `student`.`id`                        AS `userid`,
+       `student`.`firstname`                 AS `firstname`,
+       `student`.`lastname`                  AS `lastname`,
+       `student`.`email`                     AS `mailto`,
+       `student`.`data`                      AS `cc_email`,
+       `mdl_course`.`id`                     AS `courseid`,
+       `mdl_course`.`fullname`               AS `coursename`,
+       `mdl_assign`.`name`                   AS `assignment`,
+       `mdl_assign`.`duedate`                AS `time_due`,
        From_unixtime(`mdl_assign`.`duedate`) AS `time_due_human`
-FROM   (((((((`mdl_assign`
-             JOIN `mdl_course`
-               ON(( `mdl_course`.`id` = `mdl_assign`.`course` )))
-            JOIN `mdl_context`
-              ON(( `mdl_context`.`instanceid` = `mdl_course`.`id` )))
-           JOIN `mdl_role_assignments`
-             ON(( `mdl_role_assignments`.`contextid` = `mdl_context`.`id` )))
-          JOIN `view_student` `student`
-            ON(( `mdl_role_assignments`.`userid` = `student`.`id` )))
-         JOIN `mdl_enrol`
-           ON(( `mdl_enrol`.`courseid` = `mdl_course`.`id` )))
-        JOIN `mdl_user_enrolments` `ue`
-          ON(( ( `ue`.`enrolid` = `mdl_enrol`.`id` )
-               AND ( `ue`.`userid` = `student`.`id` ) )))
-               JOIN view_assign_plugin_config ON view_assign_plugin_config.id = mdl_assign.id
-               LEFT JOIN `mdl_assign_submission`
-                     ON(( `mdl_assign_submission`.`assignment` =
-                       `mdl_assign`.`id` AND student.id = mdl_assign_submission.userid)))
-WHERE   Isnull(`mdl_assign_submission`.`id`) AND
-        ( `mdl_assign`.`grade` > 0 )
+FROM   (((((((((`mdl_assign`
+                JOIN `mdl_course`
+                  ON(( `mdl_course`.`id` = `mdl_assign`.`course` )))
+               JOIN `mdl_context`
+                 ON(( `mdl_context`.`instanceid` = `mdl_course`.`id` )))
+              JOIN `mdl_role_assignments`
+                ON(( `mdl_role_assignments`.`contextid` = `mdl_context`.`id` )))
+             JOIN `view_student` `student`
+               ON(( `mdl_role_assignments`.`userid` = `student`.`id` )))
+            JOIN `mdl_enrol`
+              ON(( `mdl_enrol`.`courseid` = `mdl_course`.`id` )))
+           JOIN `mdl_user_enrolments` `ue`
+             ON(( ( `ue`.`enrolid` = `mdl_enrol`.`id` )
+                  AND ( `ue`.`userid` = `student`.`id` ) )))
+          JOIN `view_assign_plugin_config`
+            ON(( `view_assign_plugin_config`.`id` = `mdl_assign`.`id` )))
+         LEFT JOIN `mdl_assign_submission`
+                ON(( ( `mdl_assign_submission`.`assignment` =
+                     `mdl_assign`.`id` )
+                     AND ( `student`.`id` =
+                  `mdl_assign_submission`.`userid` ) )))
+        LEFT JOIN `mdl_assign_grades`
+               ON(( ( `mdl_assign_grades`.`assignment` = `mdl_assign`.`id` )
+                    AND ( `mdl_assign_grades`.`userid` = `student`.`id` ) )))
+WHERE  ( Isnull(`mdl_assign_submission`.`id`)
+         AND Isnull(`mdl_assign_grades`.`id`)
+         AND ( `mdl_assign`.`grade` > 0 )
          AND ( Unix_timestamp(Now()) > `mdl_assign`.`duedate` )
          AND ( NOT(( `mdl_course`.`fullname` LIKE '%demo%' )) )
          AND ( NOT(( `mdl_course`.`fullname` LIKE '%test%' )) )
-         AND ( ( Unix_timestamp(Now()) - ( ( ( ( 60 * 60 ) * 24 ) * 7 ) * 8 ) )  < `mdl_course`.`startdate` )
-         AND ( `mdl_role_assignments`.`roleid` = 5 ) 
+         AND ( NOT(( `mdl_course`.`fullname` LIKE '%CVC 101%' )) )
+         AND ( ( Unix_timestamp(Now()) - ( ( ( ( 60 * 60 ) * 24 ) * 7 ) * 8 ) )
+               <
+                   `mdl_course`.`startdate` )
+         AND ( `mdl_role_assignments`.`roleid` = 5 ) )
 ORDER  BY `student`.`lastname`,
           `student`.`firstname` 
+
