@@ -19,11 +19,9 @@ define('SEND_EMAILS', TRUE);
 // Whether the emails should be cc'd to someone (used for first few weeks, in development)
 define('EMAIL_CC_ON', TRUE);
 // Who should receive emails in test mode.
-define('EMAIL_TEST_ADDR', 'outofegypt+test@gmail.com');
+define('EMAIL_TEST_ADDR', 'techie.techmission+cc@gmail.com');
 // Who the emails should be cc'd to
 define('EMAIL_CC_ADDR', 'techie.techmission+cc@gmail.com');
-// define('EMAIL_CC_ADDR', 'outofegypt+test@gmail.com');
-
 
 /* Used in debugging only. */
 
